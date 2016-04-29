@@ -1,5 +1,5 @@
 # JS_LOIC
-The notorious web version of LOIC written in PURE JavaScript / HTML.
+###The notorious web version of LOIC written in PURE JavaScript / HTML.
 
 
 My own custom-coded version of the notorious JavaScript version of LOIC, With full support. Including port! This is the first JS LOIC to ever allow you to choos the port to attack on released in the Public Domain!
